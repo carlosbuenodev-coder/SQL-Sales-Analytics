@@ -1,0 +1,2 @@
+# Backup local com registros de clientes; não incluir no repositório.
+/data/sql_sales_analytics_backup_2026.sql
