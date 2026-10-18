@@ -16,3 +16,11 @@ SELECT
     COUNT(*) AS pedidos_com_itens,
     AVG(valor_pedido) AS ticket_medio_calculado
 FROM total_por_pedido;
+
+-- RESULTADOS DA EXECUCAO
+-- Pedidos concluidos com itens: 1610
+-- Faturamento total: R$ 17.471.526,15
+-- Ticket medio: R$ 10.851,88
+--
+-- O ticket medio representa o valor medio
+-- dos pedidos concluidos com itens.

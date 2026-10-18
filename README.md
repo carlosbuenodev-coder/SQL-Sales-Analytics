@@ -77,3 +77,73 @@ O diagrama abaixo apresenta os relacionamentos entre as tabelas, suas chaves pri
 ![Diagrama Relacional](docs/diagrama-relacional.png)
 
 O modelo foi desenvolvido e documentado utilizando o MySQL Workbench.
+
+Resultados das Análises SQL
+
+1. Faturamento Geral
+
+A análise considera exclusivamente pedidos com status Concluido, utilizando os registros da tabela itens_pedido.
+
+Indicador	Resultado
+Pedidos concluídos com itens	1.610
+Unidades vendidas	9.221
+Faturamento total	R$ 17.471.526,15
+
+Metodologia: o faturamento foi calculado multiplicando a quantidade de cada item pelo preço unitário registrado no pedido e somando os valores.
+
+Tecnologias: MySQL 8.0 e SQL, utilizando INNER JOIN, COUNT DISTINCT, SUM e WHERE.
+
+2. Evolução Mensal das Vendas
+
+A análise utiliza DATE_FORMAT, COUNT DISTINCT, SUM, INNER JOIN e GROUP BY para acompanhar o desempenho comercial ao longo do tempo.
+
+Resumo anual dos pedidos concluídos:
+
+Ano	Pedidos	Faturamento
+2024	621	R$ 6.706.716,25
+2025	617	R$ 6.746.385,00
+2026 (até agosto)	372	R$ 4.018.424,90
+
+Principais resultados:
+
+* Faturamento total analisado: R$ 17.471.526,15.
+* Maior faturamento mensal: maio de 2026, com R$ 719.339,30.
+* Maior volume mensal: maio de 2026, com 384 unidades vendidas.
+* A análise considera exclusivamente pedidos com status Concluido.
+
+Observação: agosto de 2026 pode representar um mês parcial, portanto as comparações devem considerar essa possibilidade.
+
+## Resultados das Análises SQL
+
+O projeto utiliza MySQL 8.0 para analisar
+dados de vendas, clientes e produtos.
+
+### Indicadores Gerais
+
+| Indicador | Resultado |
+|---|---|
+| Pedidos concluídos com itens | 1.610 |
+| Unidades vendidas | 9.221 |
+| Faturamento total | R$ 17.471.526,15 |
+| Ticket médio | R$ 10.851,88 |
+
+### Principais Análises
+
+1. Faturamento geral dos pedidos concluídos.
+2. Evolução das vendas por mês.
+3. Ranking dos produtos mais vendidos.
+4. Identificação dos clientes de maior valor.
+5. Cálculo do ticket médio por pedido.
+
+### Tecnologias e Conhecimentos
+
+- MySQL 8.0
+- MySQL Workbench
+- SQL e modelagem relacional
+- INNER JOIN e GROUP BY
+- Funções de agregação
+- Subconsultas e CTEs
+- Git e GitHub
+
+Os indicadores foram calculados com base
+nos pedidos concluídos que possuem itens.
