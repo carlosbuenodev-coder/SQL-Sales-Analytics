@@ -67,3 +67,13 @@ Este trabalho não executa as consultas nem importa o backup. `database/estrutur
 O backup contém registros de clientes com nomes e localização em nível de cidade/estado. Embora não tenham sido encontrados campos de contato ou credenciais no esquema, não é possível confirmar apenas pelo arquivo se os dados são fictícios ou se há autorização para divulgação. Por segurança, o backup está excluído do controle de versão. Use dados sintéticos ou anonimizados e autorizados se precisar compartilhar uma cópia reproduzível.
 
 Para reproduzir as análises em outro ambiente, são necessários MySQL 8.0, a estrutura documentada e dados de teste autorizados. As métricas usam o status `'Concluido'`, observado nos dados do backup. Veja [`docs/metricas-e-reproducao.md`](docs/metricas-e-reproducao.md) para detalhes e limitações.
+
+## Modelo Relacional do Banco de Dados
+
+O projeto utiliza um banco de dados relacional MySQL 8, composto por quatro tabelas: clientes, produtos, pedidos e itens_pedido.
+
+O diagrama abaixo apresenta os relacionamentos entre as tabelas, suas chaves primárias (PK) e estrangeiras (FK).
+
+![Diagrama Relacional](docs/diagrama-relacional.png)
+
+O modelo foi desenvolvido e documentado utilizando o MySQL Workbench.
