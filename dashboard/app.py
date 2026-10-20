@@ -132,11 +132,56 @@ try:
 
             if not df_mensal.empty:
                 df_mensal["faturamento"] = pd.to_numeric(df_mensal["faturamento"])
-                df_mensal["data"] = pd.to_datetime(df_mensal["mes"] + "-01")
-                fig_mensal = px.line(df_mensal, x="data", y="faturamento", markers=True,
-                                    labels={"data": "Mês", "faturamento": "Faturamento (R$)"})
-                fig_mensal.update_layout(hovermode="x unified", margin=dict(t=15, b=15))
-                fig_mensal.update_traces(hovertemplate="R$ %{y:,.2f}<extra></extra>")
+                df_mensal["data"] = pd.to_datetime(df_mensal["mes"] + "-01")# Cria uma cópia para exibir somente os meses completos
+    df_linha = df_mensal.copy()
+
+    if not df_ultima_venda.empty and pd.notna(ultima_data):
+        fim_do_mes = ultima_data + pd.offsets.MonthEnd(0)
+
+        if ultima_data.date() < fim_do_mes.date():
+            df_linha = df_linha[
+                df_linha["data"].dt.to_period("M")
+                != ultima_data.to_period("M")
+            ]
+
+    fig_mensal = px.line(
+        df_linha,
+        x="data",
+        y="faturamento",
+        markers=True,
+        labels={"data": "Mês", "faturamento": "Faturamento (R$)"}
+    )
+    fig_mensal.update_layout(hovermode="x unified", margin=dict(t=15, b=15))
+    fig_mensal.update_traces(hovertemplate="R$ %{y:,.2f}<extra></extra>")
+                # Destaca o último mês quando seus dados são parciais
+    if not df_ultima_venda.empty and pd.notna(ultima_data):
+            fim_do_mes = ultima_data + pd.offsets.MonthEnd(0)
+
+            if ultima_data.date() < fim_do_mes.date():
+                mes_parcial = ultima_data.to_period("M").to_timestamp()
+
+                df_parcial = df_mensal[
+                    df_mensal["data"].dt.to_period("M")
+                    == mes_parcial.to_period("M")
+                ]
+
+                if not df_parcial.empty:
+                    fig_mensal.add_scatter(
+                        x=df_parcial["data"],
+                        y=df_parcial["faturamento"],
+                        mode="markers",
+                        marker=dict(
+                            color="orange",
+                            size=13,
+                            symbol="circle"
+                        ),
+                        name="Mês parcial",
+                        hovertemplate=(
+                            "Mês parcial<br>"
+                            "Faturamento: R$ %{y:,.2f}"
+                            "<extra></extra>"
+                        )
+                    )
                 st.plotly_chart(fig_mensal, use_container_width=True)
             else:
                 st.info("Sem vendas no período selecionado.")
