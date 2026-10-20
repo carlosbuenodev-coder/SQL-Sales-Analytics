@@ -93,6 +93,7 @@ try:
 
     st.divider()
     st.subheader("📈 Evolução do faturamento mensal")
+        
     df_mensal = consultar("""
         SELECT DATE_FORMAT(p.data_pedido, '%Y-%m') AS mes,
                ROUND(SUM(ip.quantidade * ip.preco_unitario), 2) AS faturamento
@@ -104,16 +105,41 @@ try:
         ORDER BY mes
     """, (ano_inicial, ano_final))
 
-    if not df_mensal.empty:
-        df_mensal["faturamento"] = pd.to_numeric(df_mensal["faturamento"])
-        df_mensal["data"] = pd.to_datetime(df_mensal["mes"] + "-01")
-        fig_mensal = px.line(df_mensal, x="data", y="faturamento", markers=True,
-                             labels={"data": "Mês", "faturamento": "Faturamento (R$)"})
-        fig_mensal.update_layout(hovermode="x unified", margin=dict(t=15, b=15))
-        fig_mensal.update_traces(hovertemplate="R$ %{y:,.2f}<extra></extra>")
-        st.plotly_chart(fig_mensal, use_container_width=True)
-    else:
-        st.info("Sem vendas no período selecionado.")
+    # Verifica a última data de venda concluída no período selecionado
+    df_ultima_venda = consultar("""
+        SELECT MAX(p.data_pedido) AS ultima_data
+        FROM pedidos p
+        WHERE p.status_pedido = 'Concluido'
+        AND YEAR(p.data_pedido) BETWEEN %s AND %s
+    """, (ano_inicial, ano_final))
+
+    if not df_ultima_venda.empty:
+        ultima_data = pd.to_datetime(
+            df_ultima_venda.iloc[0]["ultima_data"],
+            errors="coerce"
+        )
+
+        if pd.notna(ultima_data):
+            fim_do_mes = ultima_data + pd.offsets.MonthEnd(0)
+
+            if ultima_data.date() < fim_do_mes.date():
+                st.info(
+                    f"📅 Período parcial — {ultima_data.strftime('%m/%Y')}: "
+                    f"existem vendas registradas somente até "
+                    f"{ultima_data.strftime('%d/%m/%Y')}. "
+                    "A comparação com meses completos exige cautela."
+                )
+
+            if not df_mensal.empty:
+                df_mensal["faturamento"] = pd.to_numeric(df_mensal["faturamento"])
+                df_mensal["data"] = pd.to_datetime(df_mensal["mes"] + "-01")
+                fig_mensal = px.line(df_mensal, x="data", y="faturamento", markers=True,
+                                    labels={"data": "Mês", "faturamento": "Faturamento (R$)"})
+                fig_mensal.update_layout(hovermode="x unified", margin=dict(t=15, b=15))
+                fig_mensal.update_traces(hovertemplate="R$ %{y:,.2f}<extra></extra>")
+                st.plotly_chart(fig_mensal, use_container_width=True)
+            else:
+                st.info("Sem vendas no período selecionado.")
 
     st.divider()
     st.subheader("📊 Comparação anual")
