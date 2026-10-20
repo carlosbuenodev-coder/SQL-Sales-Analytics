@@ -162,7 +162,11 @@ http://localhost:8501
 
 Observação: o dashboard depende de uma instância MySQL configurada com o banco e os dados necessários. Não há uma base pública hospedada automaticamente pelo repositório.
 
-Evidências visuais
+##Evidências visuais
+
+### Visão geral do dashboard
+
+![Visão geral do dashboard SQL Sales Analytics](docs/imagens/visao-geral.png)
 
 As capturas de tela do dashboard poderão ser armazenadas em docs/imagens/.
 
