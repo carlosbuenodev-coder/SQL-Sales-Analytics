@@ -1,25 +1,104 @@
-# SQL Sales Analytics
+SQL Sales Analytics
 
-Projeto de portfólio de análise de vendas com **MySQL 8**, **SQL**, **Python**, **Pandas**, **Plotly** e **Streamlit**. Os dados são fictícios.
+Projeto de Portfólio | SQL • MySQL • Python • Pandas • Plotly • Streamlit
 
-## Objetivo
+Projeto de análise de vendas desenvolvido para demonstrar competências em consultas SQL, modelagem relacional, tratamento e análise de dados, integração com Python e visualização de indicadores de negócio.
 
-Explorar vendas concluídas, identificar tendências, comparar períodos e apresentar indicadores de negócio por meio de um dashboard interativo.
+O projeto utiliza dados fictícios armazenados em um banco MySQL e apresenta os resultados em um dashboard interativo desenvolvido com Streamlit.
 
-## Funcionalidades
+Objetivo do projeto
 
-- Filtros por ano inicial e final.
-- Faturamento, quantidade de pedidos, unidades vendidas e ticket médio.
-- Evolução mensal do faturamento.
-- Comparação anual e variação percentual.
-- Comparação entre períodos equivalentes (ano anterior x ano atual, até a última data com pedido concluído).
-- Top 10 produtos e faturamento por categoria.
+Transformar dados de vendas em informações úteis para apoiar a análise de desempenho comercial, permitindo:
 
-> Atenção: a comparação de anos completos com anos parciais pode induzir a interpretações incorretas. Utilize a seção de períodos equivalentes para uma análise mais justa. A comparação é feita com base na última data disponível nos dados, não necessariamente na data de hoje.
+* Acompanhar faturamento e volume de vendas.
+* Identificar tendências mensais e anuais.
+* Comparar o desempenho entre períodos.
+* Avaliar produtos e categorias.
+* Explorar indicadores de negócio com filtros interativos.
 
-## Estrutura sugerida
+Tecnologias utilizadas
 
-```text
+Tecnologia	Aplicação
+MySQL 8	Banco de dados relacional
+SQL	Consultas, relacionamentos e agregações
+Python	Integração e processamento
+Pandas	Manipulação de dados
+Plotly	Gráficos interativos
+Streamlit	Interface do dashboard
+Git e GitHub	Versionamento e documentação
+
+Estrutura do banco de dados
+
+O projeto utiliza quatro tabelas principais:
+
+Tabela	Finalidade
+clientes	Cadastro de clientes
+produtos	Catálogo de produtos
+pedidos	Informações e status dos pedidos
+itens_pedido	Produtos, quantidades e preços registrados em cada pedido
+
+Relacionamentos principais:
+
+* Um cliente pode realizar vários pedidos.
+* Um pedido pode conter vários itens.
+* Um produto pode aparecer em diferentes pedidos.
+
+Essa estrutura permite analisar vendas por cliente, produto, categoria e período.
+
+Indicadores do dashboard
+
+O dashboard apresenta:
+
+* Faturamento total: valor vendido nos pedidos concluídos.
+* Pedidos concluídos: quantidade de pedidos válidos para a análise.
+* Unidades vendidas: soma das quantidades dos itens vendidos.
+* Ticket médio: faturamento dividido pelo número de pedidos concluídos.
+* Evolução mensal: acompanhamento do faturamento ao longo do tempo.
+* Comparação anual: análise de resultados e variação percentual.
+* Períodos equivalentes: comparação entre intervalos de datas comparáveis.
+* Top 10 produtos: produtos com maior faturamento.
+* Faturamento por categoria: participação das categorias nas vendas.
+
+Resultados de referência
+
+Em uma análise realizada com a base fictícia, foram obtidos os seguintes indicadores para pedidos concluídos:
+
+Indicador	Resultado
+Faturamento	R$ 17.471.526,15
+Pedidos concluídos	1.610
+Unidades vendidas	9.221
+Ticket médio	R$ 10.851,88
+
+Os resultados representam uma referência da base analisada e podem mudar conforme os dados e os filtros selecionados.
+
+Regras de negócio
+
+1. Pedidos concluídos
+
+Apenas pedidos com status_pedido = 'Concluido' entram nos indicadores de vendas.
+
+2. Faturamento
+
+O faturamento é calculado utilizando a quantidade vendida multiplicada pelo preço unitário registrado no momento da venda:
+
+itens_pedido.quantidade * itens_pedido.preco_unitario
+
+Dessa forma, alterações futuras no preço do catálogo não modificam o histórico financeiro das vendas.
+
+3. Ticket médio
+
+O ticket médio corresponde ao faturamento dividido pela quantidade de pedidos concluídos.
+
+4. Comparação entre períodos
+
+Comparar um ano completo com um ano ainda parcial pode produzir conclusões incorretas. Por isso, o dashboard inclui uma análise de períodos equivalentes, baseada na última data disponível nos pedidos concluídos.
+
+5. Qualidade do catálogo
+
+Parte do catálogo utiliza identificações genéricas Produto Portfolio. Existe uma revisão de nomes comerciais em andamento, mas os modelos sugeridos ainda dependem de validação individual e não devem ser considerados automaticamente verificados.
+
+Estrutura do projeto
+
 SQL-Sales-Analytics/
 ├── dashboard/
 │   ├── app.py
@@ -29,54 +108,88 @@ SQL-Sales-Analytics/
 ├── docs/
 │   └── imagens/
 ├── queries/
-├── .gitignore
 ├── .env.example
-├── requirements.txt
-└── README.md
-```
+├── .gitignore
+├── README.md
+└── requirements.txt
 
-## Como executar localmente
+Como executar localmente
 
-1. Instale Python e MySQL e configure o banco de dados com os scripts SQL do projeto.
-2. Crie e ative um ambiente virtual:
+1. Pré-requisitos
 
-```powershell
+* Python instalado.
+* MySQL 8 instalado e em execução.
+* Banco de dados do projeto configurado.
+* Git, opcionalmente, para clonar o repositório.
+
+2. Clonar o repositório
+
+git clone https://github.com/carlosbuenodev-coder/SQL-Sales-Analytics.git
+cd SQL-Sales-Analytics
+
+3. Criar e ativar o ambiente virtual
+
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-```
 
-3. Instale as dependências:
+4. Instalar as dependências
 
-```powershell
 python -m pip install -r requirements.txt
-```
 
-4. Configure as variáveis de ambiente `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD` e `MYSQL_DATABASE`. Consulte `.env.example`. O arquivo `dashboard/conexao.py` deve ler essas variáveis; há um exemplo opcional no kit (`conexao_segura_exemplo.py`).
-5. Inicie o aplicativo:
+5. Configurar a conexão com o MySQL
 
-```powershell
+Crie um arquivo .env dentro da pasta dashboard/, utilizando o arquivo .env.example como referência.
+
+Configure as variáveis:
+
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=seu_usuario
+MYSQL_PASSWORD=sua_senha_local
+MYSQL_DATABASE=sql_sales_analytics
+
+O arquivo .env contém credenciais locais e não deve ser enviado ao GitHub.
+
+6. Executar o dashboard
+
+No terminal, na pasta principal do projeto:
+
 python -m streamlit run dashboard/app.py
-```
 
-6. Acesse `http://localhost:8501`.
+Acesse:
 
-## Regras de negócio
+http://localhost:8501
 
-- Apenas pedidos com `status_pedido = 'Concluido'` entram nos indicadores.
-- O faturamento utiliza `itens_pedido.quantidade * itens_pedido.preco_unitario`, preservando o preço histórico de cada venda.
-- O ticket médio é faturamento dividido pela quantidade de pedidos concluídos.
-- O catálogo contém nomes genéricos `Produto Portfolio` ainda em revisão; nomes sugeridos de marcas e modelos não devem ser tratados como verificados nem aplicados automaticamente.
+Observação: o dashboard depende de uma instância MySQL configurada com o banco e os dados necessários. Não há uma base pública hospedada automaticamente pelo repositório.
 
-## Evidências visuais
+Evidências visuais
 
-Adicione capturas de tela do dashboard em `docs/imagens/`, sem exibir senhas ou dados pessoais. Sugestões: `visao-geral.png`, `comparacao-anual.png` e `produtos-categorias.png`.
+As capturas de tela do dashboard poderão ser armazenadas em docs/imagens/.
 
-## Segurança
+Imagens previstas:
 
-**Nunca envie credenciais, `.env`, dumps privados, backups, `.venv` ou dados sensíveis ao GitHub.** Verifique o histórico do Git: o `.gitignore` não apaga segredos que já foram versionados. Se alguma senha já foi publicada, troque-a no MySQL.
+* Visão geral dos indicadores.
+* Evolução mensal do faturamento.
+* Comparação anual.
+* Produtos e categorias.
 
-## Próximos passos
+Segurança e boas práticas
 
-- Revisar e validar individualmente o catálogo de produtos.
-- Completar documentação do modelo relacional e das consultas SQL.
-- Publicar capturas de tela e resultados reproduzíveis.
+* Credenciais mantidas fora do versionamento.
+* Configuração de conexão por variáveis de ambiente.
+* Uso de .gitignore para arquivos locais e backups.
+* Preservação dos preços históricos das vendas.
+* Separação entre código da aplicação, consultas e documentação.
+* Revisão de qualidade dos dados antes de alterações no catálogo.
+
+Próximas melhorias
+
+* Validar individualmente os nomes e modelos do catálogo.
+* Documentar o diagrama entidade-relacionamento.
+* Organizar as principais consultas SQL com explicações.
+* Adicionar capturas de tela do dashboard.
+* Melhorar a reprodutibilidade da base de dados fictícia.
+
+⸻
+
+Projeto desenvolvido para fins educacionais e de portfólio profissional. Todos os dados comerciais apresentados são fictícios.
