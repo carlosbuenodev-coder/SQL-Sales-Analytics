@@ -1,149 +1,82 @@
 # SQL Sales Analytics
 
-Projeto de portfólio para demonstrar modelagem relacional e análise de vendas com SQL e MySQL 8. O esquema organiza clientes, produtos, pedidos e os itens que compõem cada pedido.
+Projeto de portfólio de análise de vendas com **MySQL 8**, **SQL**, **Python**, **Pandas**, **Plotly** e **Streamlit**. Os dados são fictícios.
 
-## Objetivos
+## Objetivo
 
-- Praticar consultas analíticas com junções, agregações, CTEs e funções de data.
-- Analisar faturamento calculado, evolução mensal, produtos, clientes e ticket médio.
-- Documentar o modelo e os critérios das métricas de forma reproduzível.
+Explorar vendas concluídas, identificar tendências, comparar períodos e apresentar indicadores de negócio por meio de um dashboard interativo.
 
-## Tecnologias
+## Funcionalidades
 
-- MySQL 8.0
-- SQL
-- Visual Studio Code com SQLTools
+- Filtros por ano inicial e final.
+- Faturamento, quantidade de pedidos, unidades vendidas e ticket médio.
+- Evolução mensal do faturamento.
+- Comparação anual e variação percentual.
+- Comparação entre períodos equivalentes (ano anterior x ano atual, até a última data com pedido concluído).
+- Top 10 produtos e faturamento por categoria.
 
-## Estrutura do repositório
+> Atenção: a comparação de anos completos com anos parciais pode induzir a interpretações incorretas. Utilize a seção de períodos equivalentes para uma análise mais justa. A comparação é feita com base na última data disponível nos dados, não necessariamente na data de hoje.
+
+## Estrutura sugerida
 
 ```text
-.
-├── .gitignore
-├── data/
-│   └── sql_sales_analytics_backup_2026.sql  # Backup local, ignorado pelo Git
+SQL-Sales-Analytics/
+├── dashboard/
+│   ├── app.py
+│   └── conexao.py
 ├── database/
-│   └── estrutura.sql                       # Estrutura das quatro tabelas
+├── data/
 ├── docs/
-│   ├── metricas-e-reproducao.md
-│   └── modelo-relacional.md
-└── queries/
-    ├── 01-faturamento-geral.sql
-    ├── 02-vendas-por-periodo.sql
-    ├── 03-produtos-mais-vendidos.sql
-    ├── 04-clientes-maiores-compras.sql
-    └── 05-ticket-medio.sql
+│   └── imagens/
+├── queries/
+├── .gitignore
+├── .env.example
+├── requirements.txt
+└── README.md
 ```
 
-## Modelo e dados
+## Como executar localmente
 
-O modelo contém as tabelas `clientes`, `produtos`, `pedidos` e `itens_pedido`. O backup local analisado contém 1.000 clientes, 600 produtos, 2.000 pedidos e 5.000 itens de pedido. Esses totais descrevem a quantidade de registros encontrada no arquivo, não resultados de vendas. O backup não é incluído no Git; consulte a seção de segurança e reprodução.
+1. Instale Python e MySQL e configure o banco de dados com os scripts SQL do projeto.
+2. Crie e ative um ambiente virtual:
 
-Os relacionamentos, colunas e chaves estão descritos em [`docs/modelo-relacional.md`](docs/modelo-relacional.md). O arquivo [`database/estrutura.sql`](database/estrutura.sql) corresponde às definições de tabela do backup; os valores de `AUTO_INCREMENT` do dump refletem seu estado no momento da exportação.
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 
-## Consultas analíticas
+3. Instale as dependências:
 
-Todas as consultas consideram exclusivamente pedidos cujo `status_pedido` seja `'Concluido'`.
+```powershell
+python -m pip install -r requirements.txt
+```
 
-| Arquivo | Análise |
-| --- | --- |
-| `01-faturamento-geral.sql` | Pedidos concluídos com itens, unidades e valor calculado |
-| `02-vendas-por-periodo.sql` | Pedidos concluídos agrupados por mês |
-| `03-produtos-mais-vendidos.sql` | Produtos classificados por unidades em pedidos concluídos |
-| `04-clientes-maiores-compras.sql` | Clientes classificados pelo valor de pedidos concluídos |
-| `05-ticket-medio.sql` | Média do valor calculado por pedido concluído com itens |
+4. Configure as variáveis de ambiente `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD` e `MYSQL_DATABASE`. Consulte `.env.example`. O arquivo `dashboard/conexao.py` deve ler essas variáveis; há um exemplo opcional no kit (`conexao_segura_exemplo.py`).
+5. Inicie o aplicativo:
 
-Os valores monetários são calculados pela soma de `quantidade * preco_unitario` em `itens_pedido`. O preço utilizado é o registrado no item, não o preço atual do cadastro de produtos. As consultas não contêm comandos de criação, alteração ou exclusão de dados.
+```powershell
+python -m streamlit run dashboard/app.py
+```
 
-## Como utilizar
+6. Acesse `http://localhost:8501`.
 
-1. Utilize uma instância MySQL 8.0 com o esquema compatível com `database/estrutura.sql` e dados autorizados para análise.
-2. Configure a conexão no SQLTools localmente. Não salve credenciais no repositório.
-3. Abra a consulta desejada em `queries/`, leia os comentários e execute-a no seu ambiente.
+## Regras de negócio
 
-Este trabalho não executa as consultas nem importa o backup. `database/estrutura.sql` é documentação do esquema, não foi executado nesta organização. O backup local está listado no `.gitignore` e não deve ser publicado sem revisão e autorização adequadas.
+- Apenas pedidos com `status_pedido = 'Concluido'` entram nos indicadores.
+- O faturamento utiliza `itens_pedido.quantidade * itens_pedido.preco_unitario`, preservando o preço histórico de cada venda.
+- O ticket médio é faturamento dividido pela quantidade de pedidos concluídos.
+- O catálogo contém nomes genéricos `Produto Portfolio` ainda em revisão; nomes sugeridos de marcas e modelos não devem ser tratados como verificados nem aplicados automaticamente.
 
-## Segurança e reprodução
+## Evidências visuais
 
-O backup contém registros de clientes com nomes e localização em nível de cidade/estado. Embora não tenham sido encontrados campos de contato ou credenciais no esquema, não é possível confirmar apenas pelo arquivo se os dados são fictícios ou se há autorização para divulgação. Por segurança, o backup está excluído do controle de versão. Use dados sintéticos ou anonimizados e autorizados se precisar compartilhar uma cópia reproduzível.
+Adicione capturas de tela do dashboard em `docs/imagens/`, sem exibir senhas ou dados pessoais. Sugestões: `visao-geral.png`, `comparacao-anual.png` e `produtos-categorias.png`.
 
-Para reproduzir as análises em outro ambiente, são necessários MySQL 8.0, a estrutura documentada e dados de teste autorizados. As métricas usam o status `'Concluido'`, observado nos dados do backup. Veja [`docs/metricas-e-reproducao.md`](docs/metricas-e-reproducao.md) para detalhes e limitações.
+## Segurança
 
-## Modelo Relacional do Banco de Dados
+**Nunca envie credenciais, `.env`, dumps privados, backups, `.venv` ou dados sensíveis ao GitHub.** Verifique o histórico do Git: o `.gitignore` não apaga segredos que já foram versionados. Se alguma senha já foi publicada, troque-a no MySQL.
 
-O projeto utiliza um banco de dados relacional MySQL 8, composto por quatro tabelas: clientes, produtos, pedidos e itens_pedido.
+## Próximos passos
 
-O diagrama abaixo apresenta os relacionamentos entre as tabelas, suas chaves primárias (PK) e estrangeiras (FK).
-
-![Diagrama Relacional](docs/diagrama-relacional.png)
-
-O modelo foi desenvolvido e documentado utilizando o MySQL Workbench.
-
-Resultados das Análises SQL
-
-1. Faturamento Geral
-
-A análise considera exclusivamente pedidos com status Concluido, utilizando os registros da tabela itens_pedido.
-
-Indicador	Resultado
-Pedidos concluídos com itens	1.610
-Unidades vendidas	9.221
-Faturamento total	R$ 17.471.526,15
-
-Metodologia: o faturamento foi calculado multiplicando a quantidade de cada item pelo preço unitário registrado no pedido e somando os valores.
-
-Tecnologias: MySQL 8.0 e SQL, utilizando INNER JOIN, COUNT DISTINCT, SUM e WHERE.
-
-2. Evolução Mensal das Vendas
-
-A análise utiliza DATE_FORMAT, COUNT DISTINCT, SUM, INNER JOIN e GROUP BY para acompanhar o desempenho comercial ao longo do tempo.
-
-Resumo anual dos pedidos concluídos:
-
-Ano	Pedidos	Faturamento
-2024	621	R$ 6.706.716,25
-2025	617	R$ 6.746.385,00
-2026 (até agosto)	372	R$ 4.018.424,90
-
-Principais resultados:
-
-* Faturamento total analisado: R$ 17.471.526,15.
-* Maior faturamento mensal: maio de 2026, com R$ 719.339,30.
-* Maior volume mensal: maio de 2026, com 384 unidades vendidas.
-* A análise considera exclusivamente pedidos com status Concluido.
-
-Observação: agosto de 2026 pode representar um mês parcial, portanto as comparações devem considerar essa possibilidade.
-
-## Resultados das Análises SQL
-
-O projeto utiliza MySQL 8.0 para analisar
-dados de vendas, clientes e produtos.
-
-### Indicadores Gerais
-
-| Indicador | Resultado |
-|---|---|
-| Pedidos concluídos com itens | 1.610 |
-| Unidades vendidas | 9.221 |
-| Faturamento total | R$ 17.471.526,15 |
-| Ticket médio | R$ 10.851,88 |
-
-### Principais Análises
-
-1. Faturamento geral dos pedidos concluídos.
-2. Evolução das vendas por mês.
-3. Ranking dos produtos mais vendidos.
-4. Identificação dos clientes de maior valor.
-5. Cálculo do ticket médio por pedido.
-
-### Tecnologias e Conhecimentos
-
-- MySQL 8.0
-- MySQL Workbench
-- SQL e modelagem relacional
-- INNER JOIN e GROUP BY
-- Funções de agregação
-- Subconsultas e CTEs
-- Git e GitHub
-
-Os indicadores foram calculados com base
-nos pedidos concluídos que possuem itens.
+- Revisar e validar individualmente o catálogo de produtos.
+- Completar documentação do modelo relacional e das consultas SQL.
+- Publicar capturas de tela e resultados reproduzíveis.

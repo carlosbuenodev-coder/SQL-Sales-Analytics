@@ -1,2 +1,38 @@
-# Backup local com registros de clientes; não incluir no repositório.
-/data/sql_sales_analytics_backup_2026.sql
+# Credenciais e configurações locais
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+**/secrets.toml
+*.pem
+*.key
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Editor e sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Backups e exportações locais
+*.bak
+*.backup
+*.dump
+*.sql.gz
+*.zip
+
+# Não ignore scripts .sql ou arquivos CSV fictícios do portfólio por padrão.
+
+.gitignore_backup
+README_backup.md
+
+# Backups SQL
+*.sql.bak
+*_backup_*.sql
