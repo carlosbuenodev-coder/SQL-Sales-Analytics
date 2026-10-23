@@ -36,3 +36,6 @@ README_backup.md
 # Backups SQL
 *.sql.bak
 *_backup_*.sql
+
+# Arquivos intermediarios de auditoria e revisao
+/data/

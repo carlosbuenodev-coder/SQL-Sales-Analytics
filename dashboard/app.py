@@ -187,7 +187,14 @@ try:
                 st.info("Sem vendas no período selecionado.")
 
     st.divider()
-    st.subheader("📊 Comparação anual")
+
+    st.subheader("📊 Comparação anual - janeiro a julho")
+
+    st.caption("Comparação entre períodos equivalentes: "
+        "01/01 a 31/07 de cada ano. "
+        "Somente pedidos concluídos."
+    )
+
     df_anual = consultar("""
         SELECT YEAR(p.data_pedido) AS ano,
                COUNT(DISTINCT p.id) AS pedidos,
@@ -196,6 +203,7 @@ try:
         JOIN itens_pedido ip ON ip.pedido_id = p.id
         WHERE p.status_pedido = 'Concluido'
           AND YEAR(p.data_pedido) BETWEEN %s AND %s
+          AND MONTH(p.data_pedido) BETWEEN 1 AND 7
         GROUP BY YEAR(p.data_pedido)
         ORDER BY ano
     """, (ano_inicial, ano_final))
@@ -230,10 +238,10 @@ try:
                                   delta=f"{variacao:+.2f}%")
                     else:
                         st.write(f"{int(anterior['ano'])} → {int(atual['ano'])}: sem base para variação")
-            st.caption("Atenção: anos incompletos não são diretamente comparáveis com anos completos.")
+            st.caption("Comparação anual: janeiro a julho de cada ano, considerando somente pedidos concluídos.")
 
     # Comparação justa entre períodos equivalentes (ano contra ano, mesmo corte de data).
-    # Usa a última data disponível no ano mais recente da seleção, não a data do computador.
+    # Usa a última data disponível no ano mais recente da seleção, não a data do computador
     if len(df_anual) >= 2:
         st.markdown("**Comparação entre períodos equivalentes**")
         ano_recente = int(df_anual["ano"].max())

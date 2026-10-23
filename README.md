@@ -138,9 +138,9 @@ python -m pip install -r requirements.txt
 
 5. Configurar a conexão com o MySQL
 
-Crie um arquivo .env dentro da pasta dashboard/, utilizando o arquivo .env.example como referência.
+Crie um arquivo .env na pasta principal do projeto, no mesmo nível do arquivo README.md, utilizando o .env.example como referência.
 
-Configure as variáveis:
+Configure as seguintes variáveis:
 
 MYSQL_HOST=localhost
 MYSQL_PORT=3306
@@ -148,7 +148,9 @@ MYSQL_USER=seu_usuario
 MYSQL_PASSWORD=sua_senha_local
 MYSQL_DATABASE=sql_sales_analytics
 
-O arquivo .env contém credenciais locais e não deve ser enviado ao GitHub.
+O arquivo dashboard/conexao.py utiliza python-dotenv para carregar automaticamente essas configurações.
+
+Segurança: o arquivo .env contém credenciais locais e não deve ser enviado ao GitHub. Verifique se ele está incluído no .gitignore.
 
 6. Executar o dashboard
 
@@ -167,6 +169,12 @@ Observação: o dashboard depende de uma instância MySQL configurada com o banc
 ### Visão geral do dashboard
 
 ![Visão geral do dashboard SQL Sales Analytics](docs/imagens/visao-geral.png)
+
+## Evolução do faturamento mensal
+
+o gráfico apresenta a evolução mensal do faturamento dos pedidos concluídos. O último mês pode representar um período parcial, dependendo da disponibilidade de dados.
+
+![Evolução de faturamento mensal](docs/imagens/evolucao-mensal.png)
 
 As capturas de tela do dashboard poderão ser armazenadas em docs/imagens/.
 
