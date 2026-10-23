@@ -176,16 +176,35 @@ o gráfico apresenta a evolução mensal do faturamento dos pedidos concluídos.
 
 ![Evolução de faturamento mensal](docs/imagens/evolucao-mensal.png)
 
-As capturas de tela do dashboard poderão ser armazenadas em docs/imagens/.
+### Comparação anual
 
-Imagens previstas:
+Análise do faturamento por ano, permitindo identificar tendências e diferenças entre os períodos.
 
-* Visão geral dos indicadores.
-* Evolução mensal do faturamento.
-* Comparação anual.
-* Produtos e categorias.
+![Comparação anual do faturamento](docs/imagens/comparacao-anual.png)
 
-Segurança e boas práticas
+### Comparação entre períodos equivalentes
+
+Comparação de intervalos equivalentes para evitar distorções entre anos completos e parciais.
+
+![Comparação entre períodos equivalentes](docs/imagens/periodos-equivalentes.png)
+
+### Produtos e categorias
+
+Análise dos produtos com maior faturamento e da participação das categorias nas vendas.
+
+![Análise de produtos e categorias](docs/imagens/produtos-categorias.png)
+
+### Modelo relacional do banco de dados
+
+Diagrama que apresenta as tabelas e os relacionamentos utilizados no projeto.
+
+![Diagrama relacional SQL Sales Analytics](docs/imagens/diagrama-relacional.png)
+
+As imagens apresentadas nesta seção documentam o funcionamento do dashboard SQL Sales Analytics, os principais indicadores de negócio, as análises de faturamento e a estrutura relacional do banco de dados.
+
+Todas as capturas de tela estão organizadas na pasta `docs/imagens/` deste repositório.
+
+## Segurança e boas práticas
 
 * Credenciais mantidas fora do versionamento.
 * Configuração de conexão por variáveis de ambiente.
